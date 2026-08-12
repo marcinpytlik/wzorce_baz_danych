@@ -10,10 +10,10 @@
 
 - Nie ma FK do słownika tagów.
 - Nie ma UNIQUE na elemencie.
-- SQL Server bez `OPENJSON` / Postgres bez operatorów jsonb robi skan i zgadywanie.
+- SQL Server bez `OPENJSON` / `JSON_VALUE` robi skan i zgadywanie.
 
 ## Zamiast
 
 - Zbiór wartości → tabela `EncjaTag (EncjaId, TagId)` z PK złożonym.
-- Dokument z kontraktem → `jsonb` / `JSON` + CHECK (`jsonb_typeof`, `ISJSON`) + znane klucze w dokumentacji wzorca [EAV](../wzorce/modelowanie/eav.md).
+- Dokument z kontraktem → `NVARCHAR(MAX)` + `ISJSON` + znane klucze w [EAV](../wzorce/modelowanie/eav.md).
 - Nigdy CSV do uprawnień i do kluczy.

@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `STARTER` / `READY` / `ADVANCED` |
 | **Kiedy stosować** | … |
 | **Kiedy unikać** | … |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | `sql/postgres/<kategoria>/<nazwa>.sql` · `sql/sqlserver/<kategoria>/<nazwa>.sql` |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | `sql/<kategoria>/<nazwa>.sql` |
 
 ## Problem
 

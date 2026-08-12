@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `STARTER` |
 | **Kiedy stosować** | Atrybuty nieznane w czasie projektowania, rzadko filtrowane, różne per encja (np. metadane urządzenia, cechy zgłoszenia) |
 | **Kiedy unikać** | Stabilny model (produkt, klient, faktura). Wtedy to [EAV na wszystko](../../antywzorce/eav-na-wszystko.md) |
-| **Silniki** | PostgreSQL (`jsonb` często lepszy niż klasyczne EAV), SQL Server (`SQL_VARIANT` / sparse / JSON) |
-| **SQL** | [Postgres](../../sql/postgres/modelowanie/eav.sql) · [SQL Server](../../sql/sqlserver/modelowanie/eav.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/modelowanie/eav.sql) |
 
 ## Problem
 
@@ -23,15 +24,13 @@ Atrybut (AtrybutId, Kod, TypDanych)
 Wartosc (EncjaId, AtrybutId, WartoscTekst | WartoscLiczba | WartoscData)
 ```
 
-Lepszy wariant niż jedna kolumna `sql_variant` / `text`: **osobne kolumny per typ** albo `jsonb` z JSON Schema / CHECK.
-
-Na Postgresie dla „półotwartych” cech często wygrywa:
+Lepszy wariant niż jedna kolumna `sql_variant` / `nvarchar`: **osobne kolumny per typ** albo `NVARCHAR(MAX)` z `ISJSON` i znanymi kluczami.
 
 ```text
-produkt (id, sku, atrybuty jsonb)
+Produkt (ProduktId, Sku, Atrybuty NVARCHAR(MAX) CHECK (ISJSON(Atrybuty)=1))
 ```
 
-z indeksem GIN i jawną listą znanych kluczy w dokumentacji. To nadal EAV, tylko w jednym dokumencie.
+To nadal EAV, tylko w jednym dokumencie. Indeks po `JSON_VALUE` / computed column, nie magia.
 
 ## Kluczowe ograniczenia
 
@@ -41,7 +40,7 @@ z indeksem GIN i jawną listą znanych kluczy w dokumentacji. To nadal EAV, tylk
 
 ## Operacje
 
-Zapis: upsert wartości. Odczyt „pokaż encję” jest tani (pivot / jsonb). Odczyt „wszystkie encje gdzie kolor=czerwony i waga>10” jest drogi bez GIN / sparse indexes / osobnych kolumn.
+Zapis: upsert wartości. Odczyt „pokaż encję” jest tani. Odczyt „wszystkie encje gdzie kolor=czerwony i waga>10” jest drogi bez computed column / sparse / osobnych kolumn.
 
 ## Pułapki
 
@@ -52,5 +51,5 @@ Zapis: upsert wartości. Odczyt „pokaż encję” jest tani (pivot / jsonb). O
 ## Powiązane
 
 - [Normalizacja](normalizacja.md)
-- [STI](sti.md) — gdy zestawy atrybutów są skończone i znane per typ
+- [TPH / TPT](tph-tpt-tpct.md) — gdy zestawy atrybutów są skończone i znane per typ
 - [CSV w kolumnie](../../antywzorce/csv-w-kolumnie.md)

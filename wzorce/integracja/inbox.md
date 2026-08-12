@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | Konsument at-least-once (kolejka, outbox po drugiej stronie, retry) |
 | **Kiedy unikać** | Naprawdę at-most-once i akceptujesz utratę — i tak zwykle kłamiesz |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | [Postgres](../../sql/postgres/integracja/inbox.sql) · [SQL Server](../../sql/sqlserver/integracja/inbox.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/integracja/inbox.sql) |
 
 ## Problem
 
@@ -28,7 +29,7 @@ Wzorzec:
 
 Jeśli ack przed COMMIT: przy crashu dostaniesz komunikat ponownie — dlatego krok 1 musi być odporny na duplikat.
 
-Gdy efekt nie mieści się w TX z inboxem (zewnętrzne API): zapisuj stan maszyny (`Odebrano` → `WToku` → `Zrobione`) i opieraj się na [idempotencji](idempotencja.md) po stronie API.
+Gdy efekt nie mieści się w TX z inboxem (zewnętrzne API): zapisuj stan maszyny (`Odebrano` → `WToku` → `Zrobione`) i opieraj się na [idempotencji](../wspolbieznosc/idempotencja.md) po stronie API.
 
 ## Kluczowe ograniczenia
 
@@ -49,5 +50,5 @@ Hot path: jeden INSERT. Raport „co przetworzyliśmy” = inbox. Replay z broke
 ## Powiązane
 
 - [Outbox](outbox.md) — para: atomowy emit + atomowy odbiór
-- [Idempotencja](idempotencja.md)
+- [Idempotencja](../wspolbieznosc/idempotencja.md)
 - [Saga](saga.md)

@@ -4,14 +4,15 @@
 
 | | |
 |---|---|
+| **Status** | `ADVANCED` |
 | **Kiedy stosować** | Rezerwacja + płatność + wysyłka; dwa shardy; timeout i retry |
 | **Kiedy unikać** | Wszystko mieści się w jednej TX jednej bazy — nie rysuj maszyny stanów dla INSERT-a |
-| **Silniki** | PostgreSQL, SQL Server (stan sagi w tabeli; orkiestracja w workerze) |
-| **SQL** | [Postgres](../../sql/postgres/integracja/saga.sql) · [SQL Server](../../sql/sqlserver/integracja/saga.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/integracja/saga.sql) |
 
 ## Problem
 
-2PC między bazami/kolejkami jest kruche (FCI, timeouty, locki). Chcesz „albo całość, albo świadomie cofnięte kroki”.
+2PC między bazami i brokerami jest kruche (timeouty, locki). Chcesz „albo całość, albo świadomie cofnięte kroki”.
 
 ## Model
 
@@ -26,7 +27,7 @@ Dwa style:
 Katalog pokazuje **orkiestrację** — widać ją w SQL:
 
 ```text
-Saga (SagaId, Typ, Stan, Wersja, Dane jsonb, NastepnyKrokAt)
+Saga (SagaId, Typ, Stan, Wersja, Dane NVARCHAR(MAX), NastepnyKrokAt)
 SagaKrok (SagaId, Nr, Nazwa, Stan, Kompensacja)
 ```
 
@@ -43,7 +44,7 @@ Kompensacja to nie rollback SQL. To **nowa komenda** (`ZwrocSrodki`, `ZwolnijRez
 
 ## Operacje
 
-Worker: `SKIP LOCKED` na sadze gotowej do kroku. Idempotentny krok (to samo `SagaId+Nr` dwa razy = no-op). Dead letter gdy kompensacja pada.
+Worker: `UPDLOCK, READPAST` na sadze gotowej do kroku. Idempotentny krok (to samo `SagaId+Nr` dwa razy = no-op). Dead letter gdy kompensacja pada.
 
 ## Pułapki
 
@@ -55,5 +56,5 @@ Worker: `SKIP LOCKED` na sadze gotowej do kroku. Idempotentny krok (to samo `Sag
 ## Powiązane
 
 - [Outbox](outbox.md) / [Inbox](inbox.md)
-- [Idempotencja](idempotencja.md)
-- [Sharding](../skalowanie/sharding.md)
+- [Idempotencja](../wspolbieznosc/idempotencja.md)
+- [Sharding](../wydajnosc/sharding.md)

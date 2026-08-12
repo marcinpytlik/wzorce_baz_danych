@@ -14,4 +14,4 @@
 
 ## Zamiast
 
-Rozbij po agregatach ([normalizacja](../wzorce/modelowanie/normalizacja.md)). Wspólna lista UI → [STI](../wzorce/modelowanie/sti.md) albo read model ([CQRS](../wzorce/skalowanie/cqrs.md)), nie jedna tabela zapisu.
+Rozbij po agregatach ([normalizacja](../wzorce/modelowanie/normalizacja.md)). Wspólna lista UI → [TPH](../wzorce/modelowanie/tph-tpt-tpct.md) albo [CQRS](../wzorce/wydajnosc/cqrs.md), nie jedna tabela zapisu.

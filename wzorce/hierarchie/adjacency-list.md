@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | Płytkie drzewo (org, kategorie 2–4 poziomy), głównie operacje rodzic↔dzieci |
-| **Kiedy unikać** | Częste „cała gałąź” / „ścieżka do korzenia” na szerokim, głębokim drzewie bez kontroli rekurencji |
-| **Silniki** | PostgreSQL (`WITH RECURSIVE`), SQL Server (rekurencyjny CTE) |
-| **SQL** | [Postgres](../../sql/postgres/hierarchie/adjacency-list.sql) · [SQL Server](../../sql/sqlserver/hierarchie/adjacency-list.sql) |
+| **Kiedy unikać** | Częste „cała gałąź” / „ścieżka do korzenia” na szerokim drzewie bez `OPTION (MAXRECURSION)` |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/hierarchie/adjacency-list.sql) |
 
 ## Problem
 

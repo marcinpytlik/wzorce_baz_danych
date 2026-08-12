@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `STARTER` |
 | **Kiedy stosować** | Katalog czytany w kółko, rzadkie INSERT/MOVE (drzewo towarów, menu) |
 | **Kiedy unikać** | Częste dokładanie liści i przeciąganie gałęzi — przerysowujesz połowę tabeli |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | [Postgres](../../sql/postgres/hierarchie/nested-set.sql) · [SQL Server](../../sql/sqlserver/hierarchie/nested-set.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/hierarchie/nested-set.sql) |
 
 ## Problem
 

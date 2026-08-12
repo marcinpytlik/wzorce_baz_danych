@@ -15,5 +15,5 @@
 ## Zamiast
 
 - Stabilne cechy → kolumny ([normalizacja](../wzorce/modelowanie/normalizacja.md)).
-- Skończone warianty → [STI](../wzorce/modelowanie/sti.md).
-- Naprawdę otwarte metadane → [EAV](../wzorce/modelowanie/eav.md) albo `jsonb` **na tej jednej półce**, nie na całej domenie.
+- Skończone warianty → [TPH / TPT](../wzorce/modelowanie/tph-tpt-tpct.md).
+- Naprawdę otwarte metadane → [EAV](../wzorce/modelowanie/eav.md) albo JSON **na tej jednej półce**, nie na całej domenie.

@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | Dużo małych/średnich tenantów, jeden deploy, jeden zestaw migracji |
 | **Kiedy unikać** | Regulacja wymaga fizycznej izolacji; jeden tenant = 80% danych i locków |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | [Postgres](../../sql/postgres/multi-tenant/shared-schema.sql) · [SQL Server](../../sql/sqlserver/multi-tenant/shared-schema.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/multi-tenant/shared-schema.sql) |
 
 ## Problem
 
@@ -48,4 +49,4 @@ Każde zapytanie z `TenantId`. Joby batch: jawna pętla po tenantach albo kolumn
 - [RLS](rls.md) — wymuszenie w silniku
 - [Schema-per-tenant](schema-per-tenant.md)
 - [DB-per-tenant](db-per-tenant.md)
-- [Sharding](../skalowanie/sharding.md) — gdy shared schema przestaje się mieścić
+- [Sharding](../wydajnosc/sharding.md) — gdy shared schema przestaje się mieścić

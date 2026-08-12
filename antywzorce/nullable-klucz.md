@@ -13,5 +13,5 @@ NULL w kolumnie FK to trzeci stan: jest rodzic / nie ma / nie wiadomo. UNIQUE i 
 ## Zamiast
 
 - Gość jest encją (`Klient` typu `Gosc`) albo osobnym wierszem `Anonimowy`.
-- Dwa podtypy: [STI](../wzorce/modelowanie/sti.md) `ZamowienieZalogowane` / `ZamowienieGosc`.
+- Dwa podtypy: [TPT](../wzorce/modelowanie/tph-tpt-tpct.md) `ZamowienieZalogowane` / `ZamowienieGosc`.
 - Jeśli wartość naprawdę opcjonalna i nie jest tożsamością — nie nazywaj tego kluczem i nie buduj na tym JOIN-ów obowiązkowych.

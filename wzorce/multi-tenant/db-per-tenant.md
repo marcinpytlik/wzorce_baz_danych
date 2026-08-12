@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `ADVANCED` |
 | **Kiedy stosować** | Duży / regulowany tenant, restore „tylko oni”, inne okno utrzymania |
 | **Kiedy unikać** | Setki drobnych klientów — koszt licencji, monitoringu, migracji zje produkt |
-| **Silniki** | PostgreSQL, SQL Server (tu naturalne: osobna DB, FCI/AG per warstwę, nie per drobnicę) |
-| **SQL** | [Postgres](../../sql/postgres/multi-tenant/db-per-tenant.sql) · [SQL Server](../../sql/sqlserver/multi-tenant/db-per-tenant.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/multi-tenant/db-per-tenant.sql) |
 
 ## Problem
 
@@ -22,7 +23,7 @@ Baza tenanta: pełny schemat aplikacji, bez TenantId na każdej tabeli
 
 Provisioning: kopia z snapshotu / `CREATE DATABASE ... FROM backup` szablonu. Routing w aplikacji albo w proxy.
 
-Na SQL Server: osobna baza na instancji współdzielonej jest już dużą izolacją (backup, pliki, część zasobów). Osobna instancja / FCI to kolejny szczebel — nie mieszaj tego z katalogiem wzorców „na start”.
+Na SQL Server: osobna baza na instancji współdzielonej jest już dużą izolacją (backup, pliki). Osobna instancja to kolejny szczebel.
 
 ## Kluczowe ograniczenia
 
@@ -43,5 +44,5 @@ Deploy: rolling po katalogu, canary na jednym tenancie. Restore: normalny `RESTO
 ## Powiązane
 
 - [Schema-per-tenant](schema-per-tenant.md)
-- [Sharding](../skalowanie/sharding.md)
+- [Sharding](../wydajnosc/sharding.md)
 - [Shared schema](shared-schema.md)

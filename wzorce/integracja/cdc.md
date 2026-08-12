@@ -1,45 +1,54 @@
-# CDC (Change Data Capture)
+# CDC, Change Tracking, polling
 
-> Strumień zmian wierszy z logu transakcyjnego, bez wpinania się w transakcję aplikacji.
+> Trzy sposoby czytać zmiany wierszy bez wpinania się w transakcję zapisu. To nie jest outbox: dostajesz wiersz, nie intencję.
 
 | | |
 |---|---|
-| **Kiedy stosować** | Replika, wyszukiwarka, audyt wierszy, outbox „po fakcie” gdy nie ruszysz kodu zapisu |
-| **Kiedy unikać** | Potrzebujesz intencji biznesowej (`ZamowienieZlozone` vs trzy UPDATE-y kolumn) |
-| **Silniki** | SQL Server (CDC / Change Tracking), PostgreSQL (logical decoding, `wal2json`, Debezium) |
-| **SQL** | [Postgres](../../sql/postgres/integracja/cdc.sql) · [SQL Server](../../sql/sqlserver/integracja/cdc.sql) |
+| **Status** | `STARTER` |
+| **Kiedy stosować** | Replika, wyszukiwarka, projekcja, gdy nie ruszysz kodu INSERT/UPDATE |
+| **Kiedy unikać** | Potrzebujesz `ZamowienieZlozone` — bierz [outbox](outbox.md) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/integracja/cdc.sql) |
 
 ## Problem
 
-Nie możesz albo nie chcesz dodać INSERT-a do outboxa w każdej TX. Chcesz jednak downstream: cache, read model, inna baza.
+Downstream (cache, read model, inna baza) ma wiedzieć, co się zmieniło. Nie chcesz albo nie możesz dodać outboxa do każdej TX.
 
-## Model
+## Model — trzy warianty, jedna decyzja
 
-SQL Server CDC: `sys.sp_cdc_enable_db` + `sp_cdc_enable_table` → tabele `cdc.*` + LSN. Change Tracking jest lżejszy (tylko „który wiersz”, nie wszystkie kolumny historyczne).
+| Wariant | Co dostajesz | Koszt | Kiedy |
+|---|---|---|---|
+| **CDC** | before/after, I/U/D, LSN | Agent, tabele `cdc.*`, retencja logu | Pełny obraz zmiany |
+| **Change Tracking** | Który PK się ruszył, wersja | Lżejszy, bez historii kolumn | „odśwież te id” |
+| **Polling publisher** | `SELECT TOP n WHERE ZmianaAt > @kursor` | Prosty, łatwo zgubić / zdublować | Nie wolno włączyć CDC |
 
-Postgres: `wal_level = logical`, publikacja `CREATE PUBLICATION ... FOR TABLE`, slot replikacji. Konsument: Debezium / własny decoder. W skryptach: publikacja + przykład odczytu zmian; pełny connector zostaje poza katalogiem.
+CDC: `sys.sp_cdc_enable_db` + `sp_cdc_enable_table`. Konsument trzyma LSN.
 
-CDC daje: `before`, `after`, operacja (`I/U/D`), pozycja w logu. Nie daje: nazwy komendy biznesowej, agregatu, gwarancji „jedno zdarzenie na use-case”.
+Change Tracking: `ALTER DATABASE ... SET CHANGE_TRACKING = ON` + `ALTER TABLE ... ENABLE CHANGE_TRACKING`. Konsument trzyma `CHANGE_TRACKING_CURRENT_VERSION()`.
+
+Polling: kolumna `ZmianaAt` / `rowversion` + indeks. To najgorsza semantyka (zgubiony UPDATE w tym samym ticku zegara) — zostaw na systemy, których nie ruszysz.
+
+Żaden wariant nie daje nazwy komendy biznesowej.
 
 ## Kluczowe ograniczenia
 
-- Klucz główny na tabeli źródłowej (inaczej UPDATE/DELETE są niejednoznaczne).
-- Retencja logu / cleanup CDC — pełny dysk = stoi produkcja.
-- Uprawnienia: osobny użytkownik czytnika, nie app user z prawem do wszystkiego.
+- PK na źródle (inaczej UPDATE/DELETE niejednoznaczne).
+- Retencja CDC — pełny dysk stawia bazę.
+- Osobny login czytnika, nie app user.
 
 ## Operacje
 
-Konsument trzyma checkpoint (LSN / slot). Restart od checkpointu. Snapshot początkowy (pełny dump) + dogrywanie logu.
+Snapshot początkowy + dogrywanie od checkpointu. Restart od LSN / wersji CT / kursora.
 
 ## Pułapki
 
-- Traktowanie CDC jako [outbox](outbox.md) — dostaniesz szum kolumn i utracisz semantykę.
-- Jedna publikacja na całą bazę „na wszelki wypadek” — obciążenie I/O i prywatność.
-- DDL (drop column) bez procedury na konsumencie.
-- Logical slot, którego nikt nie czyta, zatrzymuje VACUUM / obcina dysk WAL.
+- CDC jako outbox.
+- CDC na całej bazie „na wszelki wypadek”.
+- Slot/job cleanup wyłączony.
+- Polling po `datetime` bez `rowversion`.
 
 ## Powiązane
 
-- [Outbox](outbox.md) — preferuj, gdy kontrolujesz zapis
-- [CQRS](../skalowanie/cqrs.md) — CDC jako rura do projekcji
-- [Tabele temporalne](../modelowanie/temporal.md) — historia w tej samej bazie, nie strumień
+- [Outbox](outbox.md)
+- [CQRS](../wydajnosc/cqrs.md)
+- [Tabele temporalne](../historia/temporal.md)

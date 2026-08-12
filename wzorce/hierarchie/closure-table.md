@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | Częste pytania o przodków, potomków, „czy A jest nad B”, umiarkowane zapisy |
 | **Kiedy unikać** | Bardzo szerokie, głębokie drzewa z częstym MOVE — tabela domknięć puchnie |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | [Postgres](../../sql/postgres/hierarchie/closure-table.sql) · [SQL Server](../../sql/sqlserver/hierarchie/closure-table.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/hierarchie/closure-table.sql) |
 
 ## Problem
 

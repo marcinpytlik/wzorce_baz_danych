@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | OLTP, spójność, unikanie rozjazdów przy UPDATE |
 | **Kiedy unikać** | Ścieżka odczytu wymaga stałego, szerokiego wiersza — wtedy denormalizacja **celowa** (read model, widok zmaterializowany), nie „bo JOIN jest trudny” |
-| **Silniki** | PostgreSQL, SQL Server |
-| **SQL** | [Postgres](../../sql/postgres/modelowanie/normalizacja.sql) · [SQL Server](../../sql/sqlserver/modelowanie/normalizacja.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/modelowanie/normalizacja.sql) |
 
 ## Problem
 
@@ -32,12 +33,12 @@ Produkt (ProduktId, Nazwa, CenaBiezaca)
 ## Kluczowe ograniczenia
 
 - `PRIMARY KEY` / `UNIQUE` na naturalnych kandydatach (email, `(ZamowienieId, ProduktId)`).
-- `FOREIGN KEY` z jawnym `ON DELETE` (`NO ACTION` / `RESTRICT` domyślnie).
+- `FOREIGN KEY` z jawnym `ON DELETE` (`NO ACTION` / `CASCADE` / `SET NULL` — świadomie).
 - `CHECK` na dziedziny (`Ilosc > 0`, `Cena >= 0`).
 
 ## Operacje
 
-Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z [widoku zmaterializowanego](../skalowanie/materialized-view.md) / [CQRS](../skalowanie/cqrs.md), jeśli JOIN jest za drogi.
+Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z [indexed view](../wydajnosc/indexed-view.md) / [CQRS](../wydajnosc/cqrs.md), jeśli JOIN jest za drogi.
 
 ## Pułapki
 
@@ -47,6 +48,6 @@ Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z
 
 ## Powiązane
 
-- [Widok zmaterializowany](../skalowanie/materialized-view.md) — świadoma denormalizacja odczytu
+- [Indexed view](../wydajnosc/indexed-view.md) — świadoma denormalizacja odczytu
 - [EAV](eav.md) — gdy atrybuty naprawdę nie mieszczą się w kolumnach
 - [Brak unikalności](../../antywzorce/brak-unikalnosci.md)

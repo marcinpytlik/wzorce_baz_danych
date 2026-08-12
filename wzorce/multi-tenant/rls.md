@@ -4,10 +4,11 @@
 
 | | |
 |---|---|
+| **Status** | `READY` |
 | **Kiedy stosować** | [Shared schema](shared-schema.md) i chcesz, żeby pomyłka w aplikacji nie wyciekła tenantów |
 | **Kiedy unikać** | Połączenie jako superuser / `dbo` omija polityki; wtedy RLS to teatr |
-| **Silniki** | PostgreSQL (`ENABLE ROW LEVEL SECURITY`), SQL Server (security policy + predicate) |
-| **SQL** | [Postgres](../../sql/postgres/multi-tenant/rls.sql) · [SQL Server](../../sql/sqlserver/multi-tenant/rls.sql) |
+| **Silnik** | SQL Server 2022 |
+| **SQL** | [skrypt](../../sql/multi-tenant/rls.sql) |
 
 ## Problem
 
@@ -15,33 +16,35 @@ Jeden `DbContext`, jeden user SQL, filtr `Where(t => t.TenantId == current)` zap
 
 ## Model
 
-Postgres:
+Funkcja predykatu + `CREATE SECURITY POLICY` z **FILTER** i **BLOCK**. Kontekst: `SESSION_CONTEXT(N'TenantId')`.
 
 ```sql
-ALTER TABLE zamowienie ENABLE ROW LEVEL SECURITY;
-ALTER TABLE zamowienie FORCE ROW LEVEL SECURITY;  -- także właściciel
-CREATE POLICY tenant_izlo ON zamowienie
-  USING (tenant_id = current_setting('app.tenant_id')::int)
-  WITH CHECK (tenant_id = current_setting('app.tenant_id')::int);
+CREATE FUNCTION dbo.fn_tenant(@TenantId INT)
+RETURNS TABLE WITH SCHEMABINDING AS
+RETURN SELECT 1 AS ok
+WHERE @TenantId = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
+
+CREATE SECURITY POLICY dbo.TenantFilter
+ADD FILTER PREDICATE dbo.fn_tenant(TenantId) ON dbo.Zamowienie,
+ADD BLOCK  PREDICATE dbo.fn_tenant(TenantId) ON dbo.Zamowienie
+WITH (STATE = ON);
 ```
 
-SQL Server: funkcja predykatu + `CREATE SECURITY POLICY` z `FILTER` i `BLOCK`. Kontekst: `SESSION_CONTEXT(N'TenantId')` albo `SUSER_SNAME()` przy logowaniu per tenant (rzadkie).
-
-Aplikacja na starcie requestu: ustawia kontekst, **nie** skleja SQL-a z id tenanta ręcznie w każdej kwerendzie (to i tak zostaw jako obrona w głąb).
+Aplikacja na starcie requestu: `sp_set_session_context`. Przy zwrocie połączenia do puli — reset. `dbo` / `sysadmin` omija polityki.
 
 ## Kluczowe ograniczenia
 
-- `FORCE` / `BLOCK PREDICATE` — bez tego INSERT cudzego `TenantId` albo odczyt jako owner przechodzi.
-- Osobny login aplikacji **bez** `BYPASSRLS` / `sysadmin`.
-- Joby administracyjne: jawna rola `SECURITY BYPASS` albo `SET app.tenant_id` w pętli, nigdy ciche wyłączenie na stałe.
+- `BLOCK PREDICATE` — bez tego INSERT cudzego `TenantId` przechodzi.
+- Login aplikacji bez `sysadmin` / `CONTROL SERVER`.
+- Joby admina: osobna rola, nie ciche wyłączenie polityki na stałe.
 
 ## Operacje
 
-Plan zapytania: predykat RLS musi być sargable (`tenant_id = stała z ustawienia`), indeks jak w shared schema. Test: połączenie app-user bez ustawionego kontekstu ma **paść**, nie zwrócić 0 wierszy po cichu (Postgres: brak `current_setting(..., missing_ok)` bez decyzji).
+Predykat musi być sargable (`TenantId = stała z kontekstu`), indeks jak w shared schema. Test: app-user bez kontekstu ma dostać pusty zbiór albo błąd konwersji — zdecyduj i przetestuj, nie zgaduj.
 
 ## Pułapki
 
-- RLS włączone, aplikacja łączy się jako `postgres` / `sa`.
+- RLS włączone, aplikacja łączy się jako `sa` / `dbo`.
 - `FILTER` bez `BLOCK` — odczyt chroniony, zapis w cudzym tenancie nie.
 - Funkcja predykatu nie `SCHEMABINDING` / niestabilna — złe plany, bypassy.
 - Pooling: kontekst z poprzedniego requestu zostaje na połączeniu.
@@ -49,4 +52,4 @@ Plan zapytania: predykat RLS musi być sargable (`tenant_id = stała z ustawieni
 ## Powiązane
 
 - [Shared schema](shared-schema.md)
-- [Idempotencja](../integracja/idempotencja.md) — klucz z zakresem tenanta
+- [Idempotencja](../wspolbieznosc/idempotencja.md) — klucz z zakresem tenanta
