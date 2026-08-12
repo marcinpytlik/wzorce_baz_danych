@@ -1,0 +1,1 @@
+# wzorce_baz_danych
