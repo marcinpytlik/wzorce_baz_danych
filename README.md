@@ -15,7 +15,7 @@ Status karty:
 Aliasów nie mnożymy: TPH/TPT/TPCT to jedna karta, EMC połyka shadow column / backfill / compatibility view, saga połyka kompensację.
 
 ```
-projektowanie/      zasady + notacja Chena (warstwa koncepcyjna, zanim wzorzec)
+projektowanie/      zasady, Chen, Crow’s Foot, klucze, typy, nazwy, case
 wzorce/
   ewolucja/         Expand–Migrate–Contract, blue-green
   modelowanie/      normalizacja, EAV, TPH/TPT/TPCT, party, association
@@ -37,10 +37,22 @@ mechanizmy/         covering/filtered index, CHECK, UNIQUE, EXECUTE AS, chaining
 
 | Karta | Status | Bierz gdy | Nie bierz gdy |
 |---|---|---|---|
-| [Zasady projektowania](projektowanie/zasady.md) | `READY` | Nowy model, przebudowa, spór o ziarno wiersza | — |
-| [Notacja Chena](projektowanie/notacja-chena.md) | `READY` | Warsztat encji i związków, liczność, encja słaba | Diagram fizyczny (typy, indeksy) — to nie Chen |
+| [Zasady](projektowanie/zasady.md) | `READY` | Nowy model, ziarno wiersza | — |
+| [Notacja Chena](projektowanie/notacja-chena.md) | `READY` | Warsztat encji i liczności | Diagram fizyczny (typy, indeksy) |
+| [Crow’s Foot](projektowanie/crows-foot.md) | `READY` | SSMS / draw.io, te same liczności | Warsztat z biznesem — Chen |
+| [Klucze](projektowanie/klucze.md) | `READY` | PK vs UNIQUE vs surrogate | Sam IDENTITY „wystarczy” |
+| [Typy](projektowanie/typy.md) | `READY` | Nowa kolumna | `FLOAT` na pieniądze, `VARCHAR` na nazwisko |
+| [Nazewnictwo](projektowanie/nazewnictwo.md) | `READY` | Nowa tabela, review | `tbl_`, `sp_`, `Dane` |
+| [ON DELETE](projektowanie/on-delete.md) | `READY` | Każdy FK | CASCADE na całym grafie |
+| [Słownik danych](projektowanie/slownik-danych.md) | `STARTER` | Przekazanie modelu | Tylko wiki bez obiektu w bazie |
+| [Sekwencje](projektowanie/sekwencje.md) | `READY` | Skąd kolejny id | `NEWID()` na clustered PK |
+| [Collation](projektowanie/collation.md) | `READY` | Nazwiska, UNIQUE email, `LIKE` | `VARCHAR` + polskie znaki w ciemno |
+| [Kolumna obliczana](projektowanie/kolumna-obliczana.md) | `READY` | Atrybut pochodny z Chena | Agregat wielu wierszy jako computed |
+| [Lookup](projektowanie/lookup.md) | `READY` | Status, waluta, stawka | EAV albo encja `Klient` |
+| [Checklist przeglądu](projektowanie/checklist-przegladu.md) | `READY` | PR DDL | Review samych indeksów |
+| [Case: zamówienie](projektowanie/case/README.md) | `READY` | Od Chena do outboxa na jednym domenie | — |
 
-Mapa i kolejność warstw: [`projektowanie/`](projektowanie/README.md).
+Pełna mapa: [`projektowanie/`](projektowanie/README.md).
 
 ### Ewolucja schematu
 

@@ -50,6 +50,7 @@ Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z
 
 - [Notacja Chena](../../projektowanie/notacja-chena.md) — liczność i ziarno zanim JOIN
 - [Zasady projektowania](../../projektowanie/zasady.md)
+- [Case: zamówienie](../../projektowanie/case/README.md)
 - [Indexed view](../wydajnosc/indexed-view.md) — świadoma denormalizacja odczytu
 - [EAV](eav.md) — gdy atrybuty naprawdę nie mieszczą się w kolumnach
 - [Brak unikalności](../../antywzorce/brak-unikalnosci.md)
