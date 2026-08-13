@@ -54,3 +54,4 @@ Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z
 - [Indexed view](../wydajnosc/indexed-view.md) — świadoma denormalizacja odczytu
 - [EAV](eav.md) — gdy atrybuty naprawdę nie mieszczą się w kolumnach
 - [Brak unikalności](../../antywzorce/brak-unikalnosci.md)
+- [Lekcja: rozkład z anomaliami](../../dla-studentow/05-normalizacja.md) — 1NF→BCNF na arkuszu, nie skrót z tej karty
