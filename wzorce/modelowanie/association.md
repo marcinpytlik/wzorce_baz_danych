@@ -39,6 +39,7 @@ Gdy druga strona ma kilka typów: **osobna** tabela asocjacji per typ (`Zalaczni
 
 ## Powiązane
 
+- [Notacja Chena](../../projektowanie/notacja-chena.md) — M:N i atrybuty na związku
 - [Normalizacja](normalizacja.md)
 - [TPH / TPT](tph-tpt-tpct.md)
 - [CSV w kolumnie](../../antywzorce/csv-w-kolumnie.md)
