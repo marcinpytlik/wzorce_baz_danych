@@ -123,7 +123,7 @@ Mapowanie M:N z atrybutami = tabela `Pozycja (ZamowienieId, ProduktId, Ilosc, Ce
 | Prosty | `Nazwa` | Kolumna |
 | Złożony | `Adres(Miasto, Ulica)` | Kolumny składowe albo osobna encja, jeśli adres żyje samodzielnie |
 | Wielowartościowy | `◎ Telefon` | Osobna tabela `(KlientId, Telefon)` — nie CSV |
-| Pochodny | `◌ Wartosc = Ilosc × Cena` | Nie trzymać / kolumna obliczana / [indexed view](../wzorce/wydajnosc/indexed-view.md) |
+| Pochodny | `◌ Wartosc = Ilosc × Cena` | Nie trzymać / [kolumna obliczana](kolumna-obliczana.md) / [indexed view](../wzorce/wydajnosc/indexed-view.md) |
 | Kluczowy | `KlientId ★` | `PRIMARY KEY` albo UNIQUE kandydujący |
 
 Wielowartościowy atrybut w Chenie **nie jest** 1NF. Na warstwie logicznej znika: staje się tabelą. Nie „naprawiaj” go `NVARCHAR` z przecinkami ([CSV](../antywzorce/csv-w-kolumnie.md)).
@@ -166,7 +166,7 @@ Reguły (przykład w skrypcie):
 | Związek M:N | Tabela asocjacji, PK para FK |
 | Atrybuty związku | Kolumny tabeli związku / strony N |
 | Atrybut wielowartościowy | Osobna tabela z FK |
-| Atrybut pochodny | Pomijasz albo `AS` / indexed view |
+| Atrybut pochodny | Pomijasz albo `AS` — [kolumna obliczana](kolumna-obliczana.md) |
 | Uczestnictwo całkowite | `NOT NULL` + FK; nie „sprawdzimy w aplikacji” |
 
 Pełny przykład (klient–składa–zamówienie–zawiera–produkt + telefony): [`sql/projektowanie/chen-na-tabele.sql`](../sql/projektowanie/chen-na-tabele.sql).
@@ -181,7 +181,7 @@ Pełny przykład (klient–składa–zamówienie–zawiera–produkt + telefony)
 | Narzędzia | Tablica, dokument | SSMS, ER/Studio, draw.io | Narzędzia OO |
 | Kiedy | Warsztat z biznesem | Dokument tabel, FK | Gdy model = obiekty |
 
-W tym katalogu **Chen jest obowiązkowy na starcie**. Crow’s Foot możesz dorysować później, gdy tabele już istnieją — nie odwrotnie.
+W tym katalogu **Chen jest obowiązkowy na starcie**. Crow’s Foot dorysowujesz, gdy tabele już istnieją — karta: [Crow’s Foot](crows-foot.md). Nie odwrotnie.
 
 ## Pułapki
 
@@ -192,9 +192,15 @@ W tym katalogu **Chen jest obowiązkowy na starcie**. Crow’s Foot możesz dory
 - Dwa fakty w jednym rombie (`płaci i dostarcza`).
 - Crow’s Foot nazwany Chenem, bo „też ER”.
 
+Pełny przebieg (Chen → 3NF → soft delete / outbox / keyset): [case zamówienie](case/README.md).
+
 ## Powiązane
 
 - [Zasady projektowania](zasady.md)
+- [Crow’s Foot](crows-foot.md)
+- [Klucze](klucze.md)
+- [Kolumna obliczana](kolumna-obliczana.md)
+- [Case: zamówienie](case/README.md)
 - [Normalizacja](../wzorce/modelowanie/normalizacja.md)
 - [Association table](../wzorce/modelowanie/association.md)
 - [Adjacency list](../wzorce/hierarchie/adjacency-list.md)

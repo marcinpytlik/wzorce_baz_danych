@@ -47,9 +47,11 @@ Zapis: upsert wartości. Odczyt „pokaż encję” jest tani. Odczyt „wszystk
 - Filtrowanie po EAV jak po kolumnach relacyjnych — pełne skany, złe plany.
 - Brak typów → `"true"`, `"1"`, `"tak"` jako ten sam fakt.
 - EAV **i** twarde kolumny na to samo pole.
+- Słownik statusów (`NOWE`/`PLN`) to **nie** EAV — [lookup](../../projektowanie/lookup.md).
 
 ## Powiązane
 
+- [Lookup](../../projektowanie/lookup.md) — zamknięty zbiór kodów, nie otwarte atrybuty
 - [Normalizacja](normalizacja.md)
 - [TPH / TPT](tph-tpt-tpct.md) — gdy zestawy atrybutów są skończone i znane per typ
 - [CSV w kolumnie](../../antywzorce/csv-w-kolumnie.md)
