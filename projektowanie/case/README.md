@@ -9,3 +9,5 @@ Jeden mini-domen w trzech warstwach — **ten sam fakt**, nie trzy modele.
 SQL: [`sql/projektowanie/case-zamowienie.sql`](../../sql/projektowanie/case-zamowienie.sql).
 
 Po to, żeby z [zasad](../zasady.md) i [Chena](../notacja-chena.md) zejść do konkretnych kart wzorców, nie odwrotnie.
+
+Na PBD (bez outboxa): [rozgrzewka](../../dla-studentow/zadania/zamowienie.md).

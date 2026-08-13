@@ -205,3 +205,5 @@ Pełny przebieg (Chen → 3NF → soft delete / outbox / keyset): [case zamówie
 - [Association table](../wzorce/modelowanie/association.md)
 - [Adjacency list](../wzorce/hierarchie/adjacency-list.md)
 - [TPH / TPT](../wzorce/modelowanie/tph-tpt-tpct.md)
+- [Lekcja PBD: Chen](../dla-studentow/02-chen.md)
+- [Lekcja PBD: Chen](../dla-studentow/02-chen.md)

@@ -1,6 +1,8 @@
 # Skrypty SQL Server 2022
 
-Jeden skrypt na kartę. Katalogi odpowiadają `wzorce/`, `projektowanie/` i `mechanizmy/`.
+Jeden skrypt na kartę. Katalogi odpowiadają `wzorce/`, `projektowanie/`, `mechanizmy/` i `dla-studentow/`.
+
+Laboratorium PBD: [`sql/dla-studentow/`](dla-studentow/).
 
 Przykłady edukacyjne: schemat + typowe operacje. Nie są to migracje produkcyjne.
 

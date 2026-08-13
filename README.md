@@ -1,8 +1,13 @@
 # Katalog wzorców bazodanowych
 
-Mapa decyzji: **jaki model / jaki mechanizm SQL**, kiedy go brać, a kiedy odpuścić. Warstwa koncepcyjna (zasady, [Chen](projektowanie/notacja-chena.md)) jest w [`projektowanie/`](projektowanie/README.md) — przed wzorcami.
-
 Silnik: **SQL Server 2022**. Skrypty w [`sql/`](sql/).
+
+| Kim jesteś | Wejście |
+|---|---|
+| **Projektujesz** (OLTP, review schematu, produkcja) | Ten plik niżej — mapa decyzji: jaki model, kiedy, kiedy odpuścić |
+| **Uczysz się / prowadzisz PBD** | [`dla-studentow/`](dla-studentow/README.md) — kolejność zajęć, normalizacja z anomaliami, zadania na trzech domenach |
+
+Karty w [`projektowanie/`](projektowanie/README.md) są źródłem prawdy dla obu ścieżek. `wzorce/` (outbox, saga, shard…) **nie** jest pierwszym semestrem projektowania.
 
 Status karty:
 
@@ -15,6 +20,7 @@ Status karty:
 Aliasów nie mnożymy: TPH/TPT/TPCT to jedna karta, EMC połyka shadow column / backfill / compatibility view, saga połyka kompensację.
 
 ```
+dla-studentow/      ścieżka PBD: lekcje, zadania, szkice — nie katalog wzorców
 projektowanie/      zasady, Chen, Crow’s Foot, klucze, typy, nazwy, case
 wzorce/
   ewolucja/         Expand–Migrate–Contract, blue-green
@@ -30,6 +36,10 @@ wzorce/
 antywzorce/
 mechanizmy/         covering/filtered index, CHECK, UNIQUE, EXECUTE AS, chaining
 ```
+
+## Katalog dla projektującego
+
+Mapa decyzji poniżej. Nauka od zera: nie czytaj tego od wiersza „Ewolucja schematu” — idź do [`dla-studentow/`](dla-studentow/README.md).
 
 ## Kiedy który wzorzec
 
@@ -190,7 +200,7 @@ Krótkie karty narzędzi, nie decyzji domenowych: [`mechanizmy/`](mechanizmy/REA
 
 ## Zasada katalogu
 
-1. Najpierw [projektowanie](projektowanie/README.md) (Chen, zasady), potem wzorzec.
+1. Najpierw [projektowanie](projektowanie/README.md) (Chen, zasady), potem wzorzec. Nauka od zera: [dla-studentow](dla-studentow/README.md).
 2. Wzorzec = karta (problem, kiedy, model, pułapki) + skrypt SQL Server 2022.
 3. Alias → jedna karta, taktyka → sekcja, mechanizm silnika → `mechanizmy/`.
 4. Nowy wzorzec: [`wzorce/_szablon.md`](wzorce/_szablon.md).

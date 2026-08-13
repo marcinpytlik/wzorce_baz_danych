@@ -2,6 +2,8 @@
 
 Zanim wzorzec: **co jest encją, jaki ma klucz, jaka liczność**. Potem typy, nazwy, `ON DELETE`. Wzorce w `wzorce/` — gdy pojawi się konkretny ból.
 
+Uczysz się od zera (przedmiot PBD): [`dla-studentow/`](../dla-studentow/README.md) — tu jest katalog decyzji, nie sylabus.
+
 ```
 projektowanie/
   zasady.md

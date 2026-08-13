@@ -105,3 +105,4 @@ Koniec-do-końca na jednym domenie: [case Klient–Zamówienie](case/README.md).
 - [Normalizacja](../wzorce/modelowanie/normalizacja.md)
 - [Association table](../wzorce/modelowanie/association.md)
 - [Tabela-bóg](../antywzorce/tabela-bog.md)
+- [Ścieżka PBD](../dla-studentow/README.md)
