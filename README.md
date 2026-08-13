@@ -1,8 +1,8 @@
 # Katalog wzorców bazodanowych
 
-Mapa decyzji: **jaki model / jaki mechanizm SQL**, kiedy go brać, a kiedy odpuścić.
+Mapa decyzji: **jaki model / jaki mechanizm SQL**, kiedy go brać, a kiedy odpuścić. Warstwa koncepcyjna (zasady, [Chen](projektowanie/notacja-chena.md)) jest w [`projektowanie/`](projektowanie/README.md) — przed wzorcami.
 
-Silnik: **SQL Server 2022**. Skrypty w [`sql/`](sql/) — jeden plik na kartę, katalogi jak w `wzorce/`.
+Silnik: **SQL Server 2022**. Skrypty w [`sql/`](sql/).
 
 Status karty:
 
@@ -15,6 +15,7 @@ Status karty:
 Aliasów nie mnożymy: TPH/TPT/TPCT to jedna karta, EMC połyka shadow column / backfill / compatibility view, saga połyka kompensację.
 
 ```
+projektowanie/      zasady + notacja Chena (warstwa koncepcyjna, zanim wzorzec)
 wzorce/
   ewolucja/         Expand–Migrate–Contract, blue-green
   modelowanie/      normalizacja, EAV, TPH/TPT/TPCT, party, association
@@ -31,6 +32,15 @@ mechanizmy/         covering/filtered index, CHECK, UNIQUE, EXECUTE AS, chaining
 ```
 
 ## Kiedy który wzorzec
+
+### Projektowanie (zanim wzorzec)
+
+| Karta | Status | Bierz gdy | Nie bierz gdy |
+|---|---|---|---|
+| [Zasady projektowania](projektowanie/zasady.md) | `READY` | Nowy model, przebudowa, spór o ziarno wiersza | — |
+| [Notacja Chena](projektowanie/notacja-chena.md) | `READY` | Warsztat encji i związków, liczność, encja słaba | Diagram fizyczny (typy, indeksy) — to nie Chen |
+
+Mapa i kolejność warstw: [`projektowanie/`](projektowanie/README.md).
 
 ### Ewolucja schematu
 
@@ -168,6 +178,7 @@ Krótkie karty narzędzi, nie decyzji domenowych: [`mechanizmy/`](mechanizmy/REA
 
 ## Zasada katalogu
 
-1. Wzorzec = karta (problem, kiedy, model, pułapki) + skrypt SQL Server 2022.
-2. Alias → jedna karta, taktyka → sekcja, mechanizm silnika → `mechanizmy/`.
-3. Nowy wpis: [`wzorce/_szablon.md`](wzorce/_szablon.md).
+1. Najpierw [projektowanie](projektowanie/README.md) (Chen, zasady), potem wzorzec.
+2. Wzorzec = karta (problem, kiedy, model, pułapki) + skrypt SQL Server 2022.
+3. Alias → jedna karta, taktyka → sekcja, mechanizm silnika → `mechanizmy/`.
+4. Nowy wzorzec: [`wzorce/_szablon.md`](wzorce/_szablon.md).

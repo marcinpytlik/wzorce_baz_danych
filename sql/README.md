@@ -1,6 +1,6 @@
 # Skrypty SQL Server 2022
 
-Jeden skrypt na kartę wzorca. Katalogi odpowiadają `wzorce/` (oraz `mechanizmy/`).
+Jeden skrypt na kartę. Katalogi odpowiadają `wzorce/`, `projektowanie/` i `mechanizmy/`.
 
 Przykłady edukacyjne: schemat + typowe operacje. Nie są to migracje produkcyjne.
 

@@ -16,7 +16,7 @@ Powtórzony atrybut (adres w każdym zamówieniu, nazwa towaru w każdej pozycji
 
 ## Model
 
-Praktyczny cel w OLTP to **3NF / BCNF**:
+Praktyczny cel w OLTP to **3NF / BCNF** — po diagramie koncepcyjnym ([Chen](../../projektowanie/notacja-chena.md)), nie zamiast niego.
 
 1. **1NF** — atomowe wartości, brak powtarzających się grup (to nie jest „zakaz JSON”; JSON to osobny kontrakt, patrz [antywzorzec](../../antywzorce/csv-w-kolumnie.md)).
 2. **2NF** — brak zależności od części klucza złożonego.
@@ -48,6 +48,8 @@ Zapis idzie wąskimi tabelami. Odczyt „faktury” składa JOIN albo korzysta z
 
 ## Powiązane
 
+- [Notacja Chena](../../projektowanie/notacja-chena.md) — liczność i ziarno zanim JOIN
+- [Zasady projektowania](../../projektowanie/zasady.md)
 - [Indexed view](../wydajnosc/indexed-view.md) — świadoma denormalizacja odczytu
 - [EAV](eav.md) — gdy atrybuty naprawdę nie mieszczą się w kolumnach
 - [Brak unikalności](../../antywzorce/brak-unikalnosci.md)
